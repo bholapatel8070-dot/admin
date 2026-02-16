@@ -2,175 +2,537 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Daily Collection - Admin Panel</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
             min-height: 100vh;
-            padding: 20px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 12px;
+            position: relative;
+            overflow-x: hidden;
         }
 
+        /* Animated Indian Flag Background - 3 second rotation */
+        .flag-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
+            background-size: 400% 400%;
+            animation: wave 3s ease infinite;
+        }
+
+        @keyframes wave {
+            0% { background-position: 0% 0%; }
+            25% { background-position: 50% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 50% 50%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        .flag-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.1) 100%);
+            animation: pulse 4s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        .ashoka-chakra {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: rgba(0, 56, 147, 0.1);
+            border-radius: 50%;
+            border: 3px solid rgba(0, 56, 147, 0.3);
+            animation: rotate 10s linear infinite;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .ashoka-chakra::before {
+            content: '⛭';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 300px;
+            color: rgba(0, 56, 147, 0.15);
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* For mobile, smaller chakra */
+        @media (max-width: 768px) {
+            .ashoka-chakra {
+                width: 300px;
+                height: 300px;
+            }
+            .ashoka-chakra::before {
+                font-size: 200px;
+            }
+        }
+
+        /* Login Container - Mobile Optimized */
         .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 90%;
+            width: 400px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 20px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
             text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.5);
+            position: relative;
+            z-index: 10;
         }
 
         .login-container h2 {
             color: #1e3c72;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 28px;
+            font-weight: 600;
         }
 
         .login-container input {
             width: 100%;
-            padding: 15px;
+            padding: 16px 18px;
             margin-bottom: 20px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 16px;
+            font-size: 18px;
+            -webkit-appearance: none;
         }
 
         .login-container input:focus {
-            border-color: #2a5298;
+            border-color: #FF9933;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(255,153,51,0.2);
         }
 
         .login-container button {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 16px;
+            background: linear-gradient(135deg, #FF9933, #138808);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 16px;
+            font-size: 20px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            min-height: 60px;
         }
 
-        .login-container button:hover {
-            transform: translateY(-2px);
+        .login-container button:active {
+            transform: scale(0.97);
         }
 
-        .error-message {
-            color: #e74c3c;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
+        /* Main Admin Panel - Mobile Optimized */
         .container {
-            max-width: 1400px;
+            max-width: 100%;
             margin: 0 auto;
             display: none;
+            position: relative;
+            z-index: 10;
         }
 
         .header {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 16px;
+            margin-bottom: 16px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        @media (min-width: 600px) {
+            .header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
 
         .header h1 {
             color: #1e3c72;
-            font-size: 32px;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        @media (min-width: 400px) {
+            .header h1 {
+                font-size: 28px;
+            }
         }
 
         .logout-btn {
             background: #e74c3c;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 14px 20px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 18px;
+            width: 100%;
+            min-height: 50px;
         }
 
+        @media (min-width: 600px) {
+            .logout-btn {
+                width: auto;
+            }
+        }
+
+        /* Stats Grid - Mobile First */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 500px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
         }
 
         .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 16px 8px;
+            border-radius: 18px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.5);
         }
 
         .stat-card .label {
             color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
+            font-size: 12px;
+            margin-bottom: 6px;
+            font-weight: 500;
         }
 
         .stat-card .value {
             color: #1e3c72;
-            font-size: 24px;
+            font-size: 18px;
             font-weight: bold;
+            word-break: break-word;
         }
 
+        @media (min-width: 400px) {
+            .stat-card .value {
+                font-size: 20px;
+            }
+        }
+
+        /* Controls - Mobile Optimized */
         .controls {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 12px;
             margin-bottom: 20px;
-            flex-wrap: wrap;
+        }
+
+        @media (min-width: 600px) {
+            .controls {
+                flex-direction: row;
+            }
         }
 
         .search-box {
-            flex: 2;
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .search-box input {
-            flex: 1;
-            padding: 12px;
+            flex: 2;
+            min-width: 200px;
+            padding: 16px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border-radius: 18px;
             font-size: 16px;
+            background: rgba(255,255,255,0.95);
+            -webkit-appearance: none;
         }
 
-        .filter-select {
+        .search-box button {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-
-        .btn {
-            padding: 12px 25px;
+            min-width: 80px;
+            padding: 16px 12px;
             border: none;
-            border-radius: 10px;
+            border-radius: 18px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            min-height: 55px;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 18px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.95);
+            min-height: 55px;
+        }
+
+        /* Period Tabs - Scrollable on Mobile */
+        .period-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 4px 0 12px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .period-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .period-tab {
+            flex: 0 0 auto;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 40px;
+            cursor: pointer;
             transition: all 0.3s;
+            font-weight: 600;
+            font-size: 15px;
+            white-space: nowrap;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.5);
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+        }
+
+        .period-tab.active {
+            background: linear-gradient(135deg, #FF9933, #138808);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Customer Cards - Mobile Optimized */
+        .customer-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 500px) {
+            .customer-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .customer-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .customer-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 18px;
+            border-radius: 22px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.2s;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .customer-card:active {
+            transform: scale(0.98);
+        }
+
+        .customer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .customer-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e3c72;
+            word-break: break-word;
+        }
+
+        .customer-total {
+            background: #27ae60;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        /* Table - Horizontal Scroll on Mobile */
+        .entries-table {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 22px;
+            padding: 16px;
+            overflow-x: auto;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.5);
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px; /* Forces horizontal scroll on mobile */
+        }
+
+        th {
+            background: #1e3c72;
+            color: white;
+            padding: 14px 10px;
+            text-align: left;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        /* Modal - Mobile Optimized */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 24px 20px;
+            border-radius: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 5;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            color: #1e3c72;
+            word-break: break-word;
+            padding-right: 30px;
+        }
+
+        .close-btn {
+            font-size: 32px;
+            cursor: pointer;
+            color: #666;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+            border-radius: 50%;
+        }
+
+        .close-btn:active {
+            background: #e0e0e0;
+        }
+
+        /* Buttons - Mobile Optimized */
+        .btn {
+            padding: 14px 18px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 50px;
+            touch-action: manipulation;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #FF9933, #138808);
             color: white;
         }
 
@@ -184,172 +546,43 @@
             color: white;
         }
 
-        .period-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .period-tab {
-            padding: 10px 20px;
-            background: white;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .period-tab.active {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-        }
-
-        .entries-table {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #1e3c72;
-            color: white;
-            padding: 15px;
-            text-align: left;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
         .delete-btn {
             background: #e74c3c;
             color: white;
             border: none;
-            padding: 5px 15px;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 10px;
             cursor: pointer;
             margin-right: 5px;
+            font-size: 13px;
+            min-height: 40px;
         }
 
         .whatsapp-btn {
             background: #25D366;
             color: white;
             border: none;
-            padding: 5px 15px;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 10px;
             cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .customer-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .customer-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .customer-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .customer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .customer-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1e3c72;
-        }
-
-        .customer-total {
-            background: #27ae60;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            max-width: 800px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .close-btn {
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .close-btn:hover {
-            color: #e74c3c;
+            font-size: 13px;
+            min-height: 40px;
         }
 
         .history-item {
             padding: 15px;
             border-bottom: 1px solid #f0f0f0;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .history-item:last-child {
-            border-bottom: none;
+        @media (min-width: 500px) {
+            .history-item {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
 
         .history-date {
@@ -360,10 +593,70 @@
         .history-amount {
             font-weight: bold;
             color: #27ae60;
+            font-size: 16px;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        /* Section Titles */
+        h2 {
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-size: 22px !important;
+            margin: 20px 0 12px !important;
+            font-weight: 600;
+        }
+
+        /* Empty States */
+        .empty-message {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            color: #666;
+            font-size: 16px;
+            backdrop-filter: blur(5px);
+            margin: 20px 0;
+        }
+
+        /* Fix for iOS */
+        input, select, button {
+            -webkit-appearance: none;
+            appearance: none;
+            border-radius: 16px;
+        }
+
+        /* Pull to refresh hint */
+        .refresh-hint {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+            margin: 20px 0 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Safe area support */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(12px, env(safe-area-inset-left));
+                padding-right: max(12px, env(safe-area-inset-right));
+                padding-bottom: max(12px, env(safe-area-inset-bottom));
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Animated Indian Flag Background -->
+    <div class="flag-background"></div>
+    <div class="ashoka-chakra"></div>
+
     <!-- Login Form -->
     <div class="login-container" id="loginForm">
         <h2>🔐 Admin Login</h2>
@@ -375,7 +668,7 @@
     <!-- Main Admin Panel -->
     <div class="container" id="adminPanel">
         <div class="header">
-            <h1>👑 Admin Panel - Daily Collection</h1>
+            <h1>👑 Admin Panel</h1>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
 
@@ -385,7 +678,7 @@
 
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by Customer Name, Number or Location...">
+                <input type="text" id="searchInput" placeholder="Search by Name, Number or Location...">
                 <button class="btn btn-primary" onclick="searchEntries()">Search</button>
                 <button class="btn btn-danger" onclick="clearSearch()">Clear</button>
             </div>
@@ -402,12 +695,12 @@
             <div class="period-tab" onclick="filterByPeriod('all')">All Time</div>
         </div>
 
-        <h2 style="margin: 20px 0; color: white;">Customer Profiles</h2>
+        <h2>Customer Profiles</h2>
         <div class="customer-cards" id="customerCards">
             <!-- Customer cards will be populated -->
         </div>
 
-        <h2 style="margin: 30px 0 20px; color: white;">All Entries</h2>
+        <h2>All Entries</h2>
         <div class="entries-table">
             <table id="entriesTable">
                 <thead>
@@ -424,6 +717,10 @@
                 </thead>
                 <tbody id="tableBody"></tbody>
             </table>
+        </div>
+
+        <div class="refresh-hint">
+            ⬇️ Pull down to refresh ⬇️
         </div>
     </div>
 
@@ -474,6 +771,14 @@
         // Format currency
         function formatCurrency(amount) {
             return `₹${Number(amount).toFixed(2)}`;
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // Update statistics
@@ -528,7 +833,7 @@
             const employees = [...new Set(collections.map(c => c.empName))];
             const filter = document.getElementById('employeeFilter');
             filter.innerHTML = '<option value="all">All Employees</option>' +
-                employees.map(emp => `<option value="${emp}">${emp}</option>`).join('');
+                employees.map(emp => `<option value="${emp}">${escapeHtml(emp)}</option>`).join('');
         }
 
         // Get filtered entries
@@ -563,9 +868,9 @@
             if (searchTerm) {
                 const term = searchTerm.toLowerCase();
                 filtered = filtered.filter(entry => 
-                    entry.custName.toLowerCase().includes(term) ||
-                    entry.custNumber.includes(term) ||
-                    entry.location.toLowerCase().includes(term)
+                    (entry.custName && entry.custName.toLowerCase().includes(term)) ||
+                    (entry.custNumber && entry.custNumber.includes(term)) ||
+                    (entry.location && entry.location.toLowerCase().includes(term))
                 );
             }
             
@@ -601,29 +906,29 @@
             const cardsDiv = document.getElementById('customerCards');
             
             if (Object.keys(customers).length === 0) {
-                cardsDiv.innerHTML = '<p style="color: white;">No customers found</p>';
+                cardsDiv.innerHTML = '<div class="empty-message">No customers found</div>';
                 return;
             }
 
             cardsDiv.innerHTML = Object.values(customers).map(cust => `
                 <div class="customer-card" onclick="showCustomerDetails('${cust.number}')">
                     <div class="customer-header">
-                        <span class="customer-name">${cust.name}</span>
+                        <span class="customer-name">${escapeHtml(cust.name)}</span>
                         <span class="customer-total">${formatCurrency(cust.total)}</span>
                     </div>
                     <div style="margin-bottom: 10px;">
-                        📞 ${cust.number}<br>
+                        📞 ${escapeHtml(cust.number)}<br>
                         📊 Visits: ${cust.count}<br>
                         💰 Average: ${formatCurrency(cust.total/cust.count)}<br>
                         📅 Last: ${cust.lastDate}
                     </div>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button class="btn-whatsapp" onclick="event.stopPropagation(); shareCustomerOnWhatsApp('${cust.number}')" 
-                                style="background: #25D366; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+                    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        <button class="whatsapp-btn" onclick="event.stopPropagation(); shareCustomerOnWhatsApp('${cust.number}')" 
+                                style="flex:1; min-width: 100px;">
                             📱 Share
                         </button>
-                        <button class="btn-danger" onclick="event.stopPropagation(); deleteCustomer('${cust.number}')" 
-                                style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteCustomer('${cust.number}')" 
+                                style="flex:1; min-width: 100px;">
                             🗑️ Delete All
                         </button>
                     </div>
@@ -637,25 +942,28 @@
             const tbody = document.getElementById('tableBody');
 
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No entries found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px;">No entries found</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = filtered.reverse().map(entry => `
+            tbody.innerHTML = filtered.reverse().map(entry => {
+                // Escape the entry for safe JSON in onclick
+                const entryJson = JSON.stringify(entry).replace(/'/g, "\\'");
+                return `
                 <tr>
                     <td>${entry.date}<br><small>${entry.time || ''}</small></td>
-                    <td>${entry.empName}</td>
-                    <td>${entry.custName}</td>
-                    <td>${entry.custNumber}</td>
-                    <td>${entry.location}</td>
+                    <td>${escapeHtml(entry.empName)}</td>
+                    <td>${escapeHtml(entry.custName)}</td>
+                    <td>${escapeHtml(entry.custNumber)}</td>
+                    <td>${escapeHtml(entry.location)}</td>
                     <td style="color: #27ae60; font-weight: bold;">${formatCurrency(entry.amount)}</td>
                     <td>${entry.paymentMode || 'Cash'}</td>
                     <td>
                         <button class="delete-btn" onclick="deleteEntry(${entry.id})">Delete</button>
-                        <button class="whatsapp-btn" onclick='shareEntry(${JSON.stringify(entry)})'>WhatsApp</button>
+                        <button class="whatsapp-btn" onclick='shareEntry(${entryJson})'>WhatsApp</button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
 
         // Delete single entry
@@ -667,6 +975,12 @@
                 displayCustomerCards();
                 displayEntries();
                 updateEmployeeFilter();
+                
+                // If modal is open, refresh it
+                if (document.getElementById('customerModal').style.display === 'flex') {
+                    const custNumber = document.getElementById('modalCustomerName').textContent.split(' - ')[1];
+                    if (custNumber) showCustomerDetails(custNumber);
+                }
             }
         }
 
@@ -679,6 +993,7 @@
                 displayCustomerCards();
                 displayEntries();
                 updateEmployeeFilter();
+                closeModal();
             }
         }
 
@@ -722,6 +1037,8 @@
             const entries = collections.filter(e => e.custNumber === custNumber);
             const customer = entries[0];
             
+            if (!customer) return;
+            
             const total = entries.reduce((s, e) => s + Number(e.amount), 0);
             
             document.getElementById('modalCustomerName').textContent = customer.custName;
@@ -742,12 +1059,16 @@
                     <div class="history-item">
                         <div>
                             <div class="history-date">${entry.date} ${entry.time || ''}</div>
-                            <div style="font-size: 12px; color: #666;">${entry.location} | ${entry.empName}</div>
+                            <div style="font-size: 12px; color: #666;">${escapeHtml(entry.location)} | ${escapeHtml(entry.empName)}</div>
                         </div>
                         <div>
                             <span class="history-amount">₹${entry.amount}</span>
-                            <button class="delete-btn" onclick="deleteEntry(${entry.id}); setTimeout(()=>showCustomerDetails('${custNumber}'), 100)" 
-                                    style="margin-left: 10px; padding: 2px 8px;">Delete</button>
+                            <div class="history-actions">
+                                <button class="delete-btn" onclick="deleteEntry(${entry.id}); setTimeout(()=>showCustomerDetails('${custNumber}'), 100)" 
+                                        style="padding: 5px 10px;">Delete</button>
+                                <button class="whatsapp-btn" onclick='shareEntry(${JSON.stringify(entry).replace(/'/g, "\\'")})' 
+                                        style="padding: 5px 10px;">Share</button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -801,6 +1122,32 @@
             }
         }
 
+        // Pull to refresh (simulated)
+        let touchStart = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStart = e.touches[0].clientY;
+        }, false);
+
+        document.addEventListener('touchmove', (e) => {
+            if (window.scrollY === 0 && e.touches[0].clientY - touchStart > 100) {
+                // Refresh data
+                collections = JSON.parse(localStorage.getItem('collections')) || [];
+                if (document.getElementById('adminPanel').style.display === 'block') {
+                    updateStats();
+                    displayCustomerCards();
+                    displayEntries();
+                    updateEmployeeFilter();
+                }
+                
+                // Show feedback
+                const hint = document.querySelector('.refresh-hint');
+                hint.innerHTML = '✅ Refreshed!';
+                setTimeout(() => {
+                    hint.innerHTML = '⬇️ Pull down to refresh ⬇️';
+                }, 1000);
+            }
+        }, false);
+
         // Auto-refresh
         setInterval(() => {
             collections = JSON.parse(localStorage.getItem('collections')) || [];
@@ -811,6 +1158,20 @@
                 updateEmployeeFilter();
             }
         }, 5000);
+
+        // Make functions globally available
+        window.checkPassword = checkPassword;
+        window.logout = logout;
+        window.searchEntries = searchEntries;
+        window.clearSearch = clearSearch;
+        window.filterByPeriod = filterByPeriod;
+        window.filterByEmployee = filterByEmployee;
+        window.showCustomerDetails = showCustomerDetails;
+        window.closeModal = closeModal;
+        window.deleteEntry = deleteEntry;
+        window.deleteCustomer = deleteCustomer;
+        window.shareEntry = shareEntry;
+        window.shareCustomerOnWhatsApp = shareCustomerOnWhatsApp;
     </script>
 </body>
 </html>
