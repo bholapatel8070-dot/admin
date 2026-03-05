@@ -1,1177 +1,912 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Daily Collection - Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.2, user-scalable=yes">
+    <title>🏙️ City Dilevery - शहर में कुछ भी डिलीवरी</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Hind', sans-serif;
+        }
+
+        :root {
+            --primary: #1e3c72;
+            --secondary: #4facfe;
+            --accent: #ff6b6b;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --whatsapp: #25D366;
+            --dark: #2d3436;
+            --light: #f5f6fa;
         }
 
         body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 12px;
+            padding: 8px;
             position: relative;
-            overflow-x: hidden;
         }
 
-        /* Animated Indian Flag Background - 3 second rotation */
-        .flag-background {
+        #particles-js {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            background: linear-gradient(135deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
-            background-size: 400% 400%;
-            animation: wave 3s ease infinite;
+            z-index: -1;
         }
 
-        @keyframes wave {
-            0% { background-position: 0% 0%; }
-            25% { background-position: 50% 50%; }
-            50% { background-position: 100% 100%; }
-            75% { background-position: 50% 50%; }
-            100% { background-position: 0% 0%; }
+        .phone-frame {
+            max-width: 460px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 50px 50px 30px 30px;
+            overflow: hidden;
+            padding: 18px 14px 25px;
+            border: 3px solid white;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
         }
 
-        .flag-background::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(0,0,0,0.1) 100%);
-            animation: pulse 4s ease infinite;
+        /* हेडर */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 5px 0;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 55px;
+            height: 55px;
+            background: var(--primary);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        .logo-img i {
+            font-size: 30px;
+            color: white;
+        }
+
+        .brand h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .brand p {
+            font-size: 10px;
+            color: #666;
+            letter-spacing: 0.5px;
+        }
+
+        .live-badge {
+            background: var(--success);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        .ashoka-chakra {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            background: rgba(0, 56, 147, 0.1);
-            border-radius: 50%;
-            border: 3px solid rgba(0, 56, 147, 0.3);
-            animation: rotate 10s linear infinite;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .ashoka-chakra::before {
-            content: '⛭';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 300px;
-            color: rgba(0, 56, 147, 0.15);
-        }
-
-        @keyframes rotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* For mobile, smaller chakra */
-        @media (max-width: 768px) {
-            .ashoka-chakra {
-                width: 300px;
-                height: 300px;
-            }
-            .ashoka-chakra::before {
-                font-size: 200px;
-            }
-        }
-
-        /* Login Container - Mobile Optimized */
-        .login-container {
-            max-width: 90%;
-            width: 400px;
-            margin: 50px auto;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px 20px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255,255,255,0.5);
-            position: relative;
-            z-index: 10;
-        }
-
-        .login-container h2 {
-            color: #1e3c72;
-            margin-bottom: 25px;
-            font-size: 28px;
-            font-weight: 600;
-        }
-
-        .login-container input {
-            width: 100%;
-            padding: 16px 18px;
-            margin-bottom: 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 16px;
-            font-size: 18px;
-            -webkit-appearance: none;
-        }
-
-        .login-container input:focus {
-            border-color: #FF9933;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255,153,51,0.2);
-        }
-
-        .login-container button {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #FF9933, #138808);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-size: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-height: 60px;
-        }
-
-        .login-container button:active {
-            transform: scale(0.97);
-        }
-
-        /* Main Admin Panel - Mobile Optimized */
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            display: none;
-            position: relative;
-            z-index: 10;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            padding: 16px;
-            margin-bottom: 16px;
+        /* सिटी सेलेक्टर */
+        .city-selector {
+            background: var(--primary);
+            border-radius: 60px;
+            padding: 5px 18px;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-
-        @media (min-width: 600px) {
-            .header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .header h1 {
-            color: #1e3c72;
-            font-size: 24px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        @media (min-width: 400px) {
-            .header h1 {
-                font-size: 28px;
-            }
-        }
-
-        .logout-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 18px;
-            width: 100%;
-            min-height: 50px;
-        }
-
-        @media (min-width: 600px) {
-            .logout-btn {
-                width: auto;
-            }
-        }
-
-        /* Stats Grid - Mobile First */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
             gap: 12px;
             margin-bottom: 20px;
+            border: 2px solid white;
         }
 
-        @media (min-width: 500px) {
-            .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        .city-selector i {
+            color: white;
+            font-size: 1.2rem;
         }
 
-        @media (min-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 16px 8px;
-            border-radius: 18px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-
-        .stat-card .label {
-            color: #666;
-            font-size: 12px;
-            margin-bottom: 6px;
+        .city-selector select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 12px 0;
+            color: white;
+            font-size: 1rem;
             font-weight: 500;
+            outline: none;
         }
 
-        .stat-card .value {
-            color: #1e3c72;
-            font-size: 18px;
-            font-weight: bold;
-            word-break: break-word;
-        }
-
-        @media (min-width: 400px) {
-            .stat-card .value {
-                font-size: 20px;
-            }
-        }
-
-        /* Controls - Mobile Optimized */
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 600px) {
-            .controls {
-                flex-direction: row;
-            }
-        }
-
-        .search-box {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .search-box input {
-            flex: 2;
-            min-width: 200px;
-            padding: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 18px;
-            font-size: 16px;
-            background: rgba(255,255,255,0.95);
-            -webkit-appearance: none;
-        }
-
-        .search-box button {
-            flex: 1;
-            min-width: 80px;
-            padding: 16px 12px;
-            border: none;
-            border-radius: 18px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            min-height: 55px;
-        }
-
-        .filter-select {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 18px;
-            font-size: 16px;
-            background: rgba(255,255,255,0.95);
-            min-height: 55px;
-        }
-
-        /* Period Tabs - Scrollable on Mobile */
-        .period-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding: 4px 0 12px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .period-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .period-tab {
-            flex: 0 0 auto;
-            padding: 12px 20px;
-            background: rgba(255,255,255,0.95);
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-size: 15px;
-            white-space: nowrap;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.5);
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-        }
-
-        .period-tab.active {
-            background: linear-gradient(135deg, #FF9933, #138808);
+        .city-selector select option {
+            background: var(--primary);
             color: white;
-            border-color: transparent;
         }
 
-        /* Customer Cards - Mobile Optimized */
-        .customer-cards {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-top: 16px;
-            margin-bottom: 24px;
-        }
-
-        @media (min-width: 500px) {
-            .customer-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 768px) {
-            .customer-cards {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .customer-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 18px;
-            border-radius: 22px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            cursor: pointer;
-            transition: transform 0.2s;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-
-        .customer-card:active {
-            transform: scale(0.98);
-        }
-
-        .customer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #f0f0f0;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .customer-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1e3c72;
-            word-break: break-word;
-        }
-
-        .customer-total {
-            background: #27ae60;
-            color: white;
-            padding: 6px 14px;
+        /* मेन कार्ड */
+        .main-card {
+            background: linear-gradient(145deg, #f5f7fa, #ffffff);
             border-radius: 30px;
-            font-weight: bold;
-            font-size: 15px;
-            white-space: nowrap;
-        }
-
-        /* Table - Horizontal Scroll on Mobile */
-        .entries-table {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 22px;
-            padding: 16px;
-            overflow-x: auto;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.5);
+            padding: 25px 20px;
             margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 800px; /* Forces horizontal scroll on mobile */
-        }
-
-        th {
-            background: #1e3c72;
-            color: white;
-            padding: 14px 10px;
-            text-align: left;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 12px 10px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 14px;
-        }
-
-        /* Modal - Mobile Optimized */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 12px;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 24px 20px;
-            border-radius: 30px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 5;
-        }
-
-        .modal-header h2 {
-            font-size: 22px;
-            color: #1e3c72;
-            word-break: break-word;
-            padding-right: 30px;
-        }
-
-        .close-btn {
-            font-size: 32px;
-            cursor: pointer;
-            color: #666;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 44px;
-            height: 44px;
+        .main-card h3 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: #f0f0f0;
-            border-radius: 50%;
-        }
-
-        .close-btn:active {
-            background: #e0e0e0;
-        }
-
-        /* Buttons - Mobile Optimized */
-        .btn {
-            padding: 14px 18px;
-            border: none;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            min-height: 50px;
-            touch-action: manipulation;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #FF9933, #138808);
-            color: white;
-        }
-
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-
-        .delete-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-right: 5px;
-            font-size: 13px;
-            min-height: 40px;
-        }
-
-        .whatsapp-btn {
-            background: #25D366;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 13px;
-            min-height: 40px;
-        }
-
-        .history-item {
-            padding: 15px;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        @media (min-width: 500px) {
-            .history-item {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .history-date {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .history-amount {
-            font-weight: bold;
-            color: #27ae60;
-            font-size: 16px;
-        }
-
-        .history-actions {
-            display: flex;
             gap: 10px;
-            margin-top: 8px;
         }
 
-        /* Section Titles */
-        h2 {
-            color: white !important;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            font-size: 22px !important;
-            margin: 20px 0 12px !important;
+        .main-card h3 i {
+            color: var(--secondary);
+        }
+
+        /* AI चैटबॉट सेक्शन - यही सबसे खास है */
+        .chat-section {
+            background: white;
+            border-radius: 30px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .chat-header h4 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-header h4 i {
+            color: var(--secondary);
+        }
+
+        .ai-badge {
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .chat-messages {
+            height: 280px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 18px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 90%;
+            word-wrap: break-word;
+            animation: slideIn 0.3s;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot {
+            background: white;
+            color: #333;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            border-left: 4px solid var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .message.bot i {
+            color: var(--secondary);
+            margin-right: 8px;
+        }
+
+        .message.bot .shop-name {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .message.bot .price {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .message.bot .delivery-time {
+            color: var(--warning);
             font-weight: 600;
         }
 
-        /* Empty States */
-        .empty-message {
-            text-align: center;
-            padding: 40px 20px;
-            background: rgba(255,255,255,0.95);
+        .chat-input-area {
+            position: relative;
+        }
+
+        .chat-input-area input {
+            width: 100%;
+            padding: 18px 60px 18px 20px;
+            border: 2px solid var(--primary);
+            border-radius: 60px;
+            background: white;
+            color: #333;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .chat-input-area input:focus {
+            border-color: var(--secondary);
+        }
+
+        .chat-input-area input::placeholder {
+            color: #999;
+        }
+
+        .chat-input-area button {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .chat-input-area button:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 15px;
+            background: white;
             border-radius: 25px;
-            color: #666;
-            font-size: 16px;
-            backdrop-filter: blur(5px);
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: typing 1s infinite;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* क्विक एक्शन बटन */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             margin: 20px 0;
         }
 
-        /* Fix for iOS */
-        input, select, button {
-            -webkit-appearance: none;
-            appearance: none;
-            border-radius: 16px;
+        .action-btn {
+            background: linear-gradient(145deg, #f0f0f0, #ffffff);
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 12px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        /* Pull to refresh hint */
-        .refresh-hint {
+        .action-btn:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .action-btn i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .action-btn span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
             text-align: center;
-            color: rgba(255,255,255,0.9);
-            font-size: 13px;
-            margin: 20px 0 10px;
-            padding: 10px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 30px;
-            backdrop-filter: blur(5px);
         }
 
-        /* Safe area support */
-        @supports (padding: max(0px)) {
-            body {
-                padding-left: max(12px, env(safe-area-inset-left));
-                padding-right: max(12px, env(safe-area-inset-right));
-                padding-bottom: max(12px, env(safe-area-inset-bottom));
-            }
+        /* सर्विसेज ग्रिड */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .service-card {
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            border: 1px solid #eee;
+            border-radius: 25px;
+            padding: 18px 12px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .service-card i {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .service-card h4 {
+            color: #333;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .service-card p {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        /* व्हाट्सएप सेक्शन */
+        .whatsapp-section {
+            background: linear-gradient(145deg, var(--whatsapp), #128C7E);
+            border-radius: 30px;
+            padding: 20px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .whatsapp-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .whatsapp-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .whatsapp-btn:hover {
+            background: white;
+            color: var(--whatsapp);
+            transform: scale(1.05);
+        }
+
+        .floating-help {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--whatsapp);
+            color: white;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 999;
+            text-decoration: none;
+            animation: bounce 2s infinite;
+            border: 2px solid white;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* नोटिफिकेशन */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 60px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 10000;
+            animation: slideInRight 0.3s;
+            border-left: 8px solid var(--success);
+            font-weight: 600;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* फूटर */
+        .footer {
+            text-align: center;
+            padding: 20px 0 10px;
+            color: #666;
+            font-size: 0.8rem;
         }
     </style>
 </head>
 <body>
-    <!-- Animated Indian Flag Background -->
-    <div class="flag-background"></div>
-    <div class="ashoka-chakra"></div>
+    <div id="particles-js"></div>
 
-    <!-- Login Form -->
-    <div class="login-container" id="loginForm">
-        <h2>🔐 Admin Login</h2>
-        <input type="password" id="password" placeholder="Enter Password" onkeypress="if(event.key==='Enter') checkPassword()">
-        <button onclick="checkPassword()">Login</button>
-        <div class="error-message" id="errorMessage"></div>
-    </div>
+    <!-- फ्लोटिंग व्हाट्सएप हेल्प -->
+    <a href="https://wa.me/9196855511883?text=🏙️%20City%20Dilevery%20से%20मदद%20चाहिए%20🏙️%20मुझे%20कुछ%20चाहिए" class="floating-help" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-    <!-- Main Admin Panel -->
-    <div class="container" id="adminPanel">
-        <div class="header">
-            <h1>👑 Admin Panel</h1>
-            <button class="logout-btn" onclick="logout()">Logout</button>
-        </div>
-
-        <div class="stats-grid" id="mainStats">
-            <!-- Stats will be populated -->
-        </div>
-
-        <div class="controls">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by Name, Number or Location...">
-                <button class="btn btn-primary" onclick="searchEntries()">Search</button>
-                <button class="btn btn-danger" onclick="clearSearch()">Clear</button>
+    <div class="phone-frame">
+        <!-- हेडर -->
+        <div class="top-bar">
+            <div class="logo-area">
+                <div class="logo-img">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="brand">
+                    <h1>City Dilevery</h1>
+                    <p>शहर में कुछ भी डिलीवरी</p>
+                </div>
             </div>
-            <select class="filter-select" id="employeeFilter" onchange="filterByEmployee()">
-                <option value="all">All Employees</option>
+            <div class="live-badge">
+                <i class="fas fa-circle"></i> 24/7
+            </div>
+        </div>
+
+        <!-- सिटी सेलेक्टर -->
+        <div class="city-selector">
+            <i class="fas fa-map-marker-alt"></i>
+            <select id="citySelect">
+                <option value="Ratlam">🌟 रतलाम (Ratlam)</option>
+                <option value="Mumbai">🏙️ मुंबई (Mumbai)</option>
+                <option value="Delhi">🏛️ दिल्ली (Delhi)</option>
+                <option value="Indore">🌆 इंदौर (Indore)</option>
+                <option value="Bhopal">🏞️ भोपाल (Bhopal)</option>
+                <option value="Jaipur">🏰 जयपुर (Jaipur)</option>
+                <option value="Lucknow">🕌 लखनऊ (Lucknow)</option>
+                <option value="Chennai">🏖️ चेन्नई (Chennai)</option>
+                <option value="Kolkata">🎭 कोलकाता (Kolkata)</option>
+                <option value="Bangalore">💻 बेंगलुरु (Bangalore)</option>
+                <option value="Hyderabad">🕌 हैदराबाद (Hyderabad)</option>
             </select>
         </div>
 
-        <div class="period-tabs">
-            <div class="period-tab active" onclick="filterByPeriod('today')">Today</div>
-            <div class="period-tab" onclick="filterByPeriod('week')">This Week</div>
-            <div class="period-tab" onclick="filterByPeriod('month')">This Month</div>
-            <div class="period-tab" onclick="filterByPeriod('year')">This Year</div>
-            <div class="period-tab" onclick="filterByPeriod('all')">All Time</div>
+        <!-- मेन कार्ड -->
+        <div class="main-card">
+            <h3><i class="fas fa-magic"></i> आपको क्या चाहिए?</h3>
+            <p style="color: #666; margin-bottom: 10px;">नीचे लिखें या बोलें - "गैस सिलेंडर चाहिए", "सब्जी लानी है", "दूध चाहिए", "दवाई चाहिए" ...</p>
         </div>
 
-        <h2>Customer Profiles</h2>
-        <div class="customer-cards" id="customerCards">
-            <!-- Customer cards will be populated -->
-        </div>
-
-        <h2>All Entries</h2>
-        <div class="entries-table">
-            <table id="entriesTable">
-                <thead>
-                    <tr>
-                        <th>Date/Time</th>
-                        <th>Employee</th>
-                        <th>Customer</th>
-                        <th>Phone</th>
-                        <th>Location</th>
-                        <th>Amount</th>
-                        <th>Payment</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-        </div>
-
-        <div class="refresh-hint">
-            ⬇️ Pull down to refresh ⬇️
-        </div>
-    </div>
-
-    <!-- Customer Details Modal -->
-    <div class="modal" id="customerModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalCustomerName">Customer Details</h2>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
+        <!-- क्विक एक्शन बटन -->
+        <div class="quick-actions">
+            <div class="action-btn" onclick="quickAction('गैस सिलेंडर')">
+                <i class="fas fa-fire"></i>
+                <span>गैस सिलेंडर</span>
             </div>
-            <div id="modalContent"></div>
+            <div class="action-btn" onclick="quickAction('सब्जी')">
+                <i class="fas fa-carrot"></i>
+                <span>सब्जी</span>
+            </div>
+            <div class="action-btn" onclick="quickAction('दूध')">
+                <i class="fas fa-mug-hot"></i>
+                <span>दूध</span>
+            </div>
+            <div class="action-btn" onclick="quickAction('किराना')">
+                <i class="fas fa-shopping-basket"></i>
+                <span>किराना</span>
+            </div>
+            <div class="action-btn" onclick="quickAction('दवाई')">
+                <i class="fas fa-pills"></i>
+                <span>दवाई</span>
+            </div>
+            <div class="action-btn" onclick="quickAction('खाना')">
+                <i class="fas fa-utensils"></i>
+                <span>खाना</span>
+            </div>
+        </div>
+
+        <!-- सर्विसेज ग्रिड -->
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-gas-pump"></i>
+                <h4>गैस सिलेंडर</h4>
+                <p>घर-घर डिलीवरी</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-apple-alt"></i>
+                <h4>ताजी सब्जी</h4>
+                <p>सीधे मंडी से</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-cow"></i>
+                <h4>दूध</h4>
+                <p>सुबह-शाम डिलीवरी</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-store"></i>
+                <h4>किराना स्टोर</h4>
+                <p>सभी सामान उपलब्ध</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-prescription-bottle"></i>
+                <h4>दवाई</h4>
+                <p>24/7 मेडिकल स्टोर</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-hamburger"></i>
+                <h4>रेस्टोरेंट</h4>
+                <p>खाना होम डिलीवरी</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-broom"></i>
+                <h4>सफाई सामान</h4>
+                <p>घरेलू सामान</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-dog"></i>
+                <h4>पालतू जानवर</h4>
+                <p>पालतू खाना</p>
+            </div>
+        </div>
+
+        <!-- AI चैटबॉट सेक्शन - ये सबसे खास है -->
+        <div class="chat-section">
+            <div class="chat-header">
+                <h4><i class="fas fa-robot"></i> City AI - कुछ भी मांगो</h4>
+                <span class="ai-badge"><i class="fas fa-bolt"></i> 24/7</span>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <i class="fas fa-robot"></i> नमस्ते! मैं City AI हूँ। मुझसे कुछ भी मांगो - गैस सिलेंडर, सब्जी, दूध, दवाई, किराना, खाना... जो चाहो!
+                </div>
+                <div class="message bot">
+                    <i class="fas fa-lightbulb"></i> उदाहरण:<br>
+                    • "गैस सिलेंडर चाहिए घर पर"<br>
+                    • "सब्जी लानी है 2 किलो टमाटर"<br>
+                    • "दूध चाहिए रोज सुबह"<br>
+                    • "पेरासिटामोल दवाई चाहिए"<br>
+                    • "खाना मंगवाना है होटल से"
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="यहाँ लिखो क्या चाहिए... (जैसे: गैस सिलेंडर चाहिए)">
+                <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <!-- व्हाट्सएप सेक्शन -->
+        <div class="whatsapp-section">
+            <div class="whatsapp-grid">
+                <a href="https://wa.me/9196855511883?text=🏙️%20मुझे%20गैस%20सिलेंडर%20चाहिए%20🏙️" class="whatsapp-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> गैस चाहिए
+                </a>
+                <a href="https://wa.me/9196855511883?text=🏙️%20मुझे%20सब्जी%20चाहिए%20🏙️" class="whatsapp-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> सब्जी चाहिए
+                </a>
+                <a href="https://wa.me/9196855511883?text=🏙️%20मुझे%20दूध%20चाहिए%20🏙️" class="whatsapp-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> दूध चाहिए
+                </a>
+                <a href="https://wa.me/9196855511883?text=🏙️%20मुझे%20दवाई%20चाहिए%20🏙️" class="whatsapp-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> दवाई चाहिए
+                </a>
+            </div>
+            <div style="text-align: center; margin-top: 15px; font-weight: 600;">
+                <i class="fab fa-whatsapp"></i> +91 96855 11883 - 24/7 हेल्पलाइन
+            </div>
+        </div>
+
+        <!-- फूटर -->
+        <div class="footer">
+            <p>🏙️ City Dilevery - आपके शहर में कुछ भी डिलीवरी 🏙️</p>
+            <p style="margin-top: 5px;">गैस सिलेंडर, सब्जी, दूध, दवाई, किराना, खाना... सब कुछ!</p>
         </div>
     </div>
 
     <script>
-        let collections = JSON.parse(localStorage.getItem('collections')) || [];
-        let currentPeriod = 'today';
-        let searchTerm = '';
-        let employeeFilter = 'all';
+        // ================== ग्लोबल वेरिएबल्स ==================
+        let currentCity = 'Ratlam';
 
-        // Password check
-        function checkPassword() {
-            const password = document.getElementById('password').value;
-            if (password === 'patidarpatel780') {
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                initializeAdmin();
-            } else {
-                document.getElementById('errorMessage').textContent = '❌ Wrong password! Try again.';
+        // ================== नोटिफिकेशन ==================
+        function showNotification(text) {
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.innerHTML = `<i class="fas fa-check-circle" style="color: var(--success);"></i> ${text}`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+
+        // ================== पार्टिकल्स ==================
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 100 },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.4, random: true },
+                size: { value: 3, random: true },
+                move: { speed: 1.5 }
             }
+        });
+
+        // ================== क्विक एक्शन ==================
+        function quickAction(item) {
+            document.getElementById('chatInput').value = `${item} चाहिए`;
+            sendMessage();
         }
 
-        // Logout function
-        function logout() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('password').value = '';
+        // ================== सिटी चेंज ==================
+        document.getElementById('citySelect').addEventListener('change', function(e) {
+            currentCity = e.target.value;
+            showNotification(`📍 ${currentCity} में सेवा शुरू`);
+        });
+
+        // ================== AI चैटबॉट - कुछ भी मांगो ==================
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (message === '') return;
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            showTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator();
+                const reply = getAIResponse(message);
+                addMessage(reply, 'bot');
+            }, 1500);
         }
 
-        // Initialize admin panel
-        function initializeAdmin() {
-            updateStats();
-            displayCustomerCards();
-            displayEntries();
-            updateEmployeeFilter();
+        function showTypingIndicator() {
+            const chat = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            chat.appendChild(typingDiv);
+            chat.scrollTop = chat.scrollHeight;
         }
 
-        // Format currency
-        function formatCurrency(amount) {
-            return `₹${Number(amount).toFixed(2)}`;
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
         }
 
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        function addMessage(text, sender) {
+            const chat = document.getElementById('chatMessages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+            msgDiv.innerHTML = sender === 'bot' ? `<i class="fas fa-robot"></i> ${text}` : text;
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
         }
 
-        // Update statistics
-        function updateStats() {
-            const today = new Date().toISOString().split('T')[0];
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
-
-            const todayEntries = collections.filter(c => c.date === today);
-            const monthEntries = collections.filter(c => {
-                const d = new Date(c.date);
-                return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
-            });
-            const yearEntries = collections.filter(c => {
-                const d = new Date(c.date);
-                return d.getFullYear() === currentYear;
-            });
-
-            const totalAmount = collections.reduce((s, e) => s + Number(e.amount), 0);
-            const uniqueCustomers = new Set(collections.map(c => c.custNumber)).size;
-
-            document.getElementById('mainStats').innerHTML = `
-                <div class="stat-card">
-                    <div class="label">Today</div>
-                    <div class="value">${formatCurrency(todayEntries.reduce((s, e) => s + Number(e.amount), 0))}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">This Month</div>
-                    <div class="value">${formatCurrency(monthEntries.reduce((s, e) => s + Number(e.amount), 0))}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">This Year</div>
-                    <div class="value">${formatCurrency(yearEntries.reduce((s, e) => s + Number(e.amount), 0))}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Total</div>
-                    <div class="value">${formatCurrency(totalAmount)}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Customers</div>
-                    <div class="value">${uniqueCustomers}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="label">Entries</div>
-                    <div class="value">${collections.length}</div>
-                </div>
-            `;
-        }
-
-        // Update employee filter dropdown
-        function updateEmployeeFilter() {
-            const employees = [...new Set(collections.map(c => c.empName))];
-            const filter = document.getElementById('employeeFilter');
-            filter.innerHTML = '<option value="all">All Employees</option>' +
-                employees.map(emp => `<option value="${emp}">${escapeHtml(emp)}</option>`).join('');
-        }
-
-        // Get filtered entries
-        function getFilteredEntries() {
-            let filtered = [...collections];
+        // ================== ये है सबसे खास फंक्शन - AI जो कुछ भी मांगो वो बताएगा ==================
+        function getAIResponse(message) {
+            const msg = message.toLowerCase();
             
-            const now = new Date();
-            const today = now.toISOString().split('T')[0];
-            
-            if (currentPeriod !== 'all') {
-                filtered = filtered.filter(entry => {
-                    const entryDate = new Date(entry.date);
-                    
-                    switch(currentPeriod) {
-                        case 'today':
-                            return entry.date === today;
-                        case 'week':
-                            const weekAgo = new Date(now);
-                            weekAgo.setDate(now.getDate() - 7);
-                            return entryDate >= weekAgo;
-                        case 'month':
-                            return entryDate.getMonth() === now.getMonth() && 
-                                   entryDate.getFullYear() === now.getFullYear();
-                        case 'year':
-                            return entryDate.getFullYear() === now.getFullYear();
-                        default:
-                            return true;
-                    }
-                });
+            // गैस सिलेंडर
+            if (msg.includes('गैस') || msg.includes('सिलेंडर') || msg.includes('gas')) {
+                return `<i class="fas fa-fire"></i> <span class="shop-name">📍 श्री गैस एजेंसी (${currentCity})</span><br>
+                        📦 सिलेंडर उपलब्ध: 14.2kg, 19kg, 5kg<br>
+                        💰 कीमत: <span class="price">₹950</span> (सब्सिडी वाला)<br>
+                        ⏰ डिलीवरी टाइम: <span class="delivery-time">30 मिनट में</span><br>
+                        📞 कॉल करें: 96855-11883<br>
+                        🚚 होम डिलीवरी फ्री!`;
             }
             
-            if (searchTerm) {
-                const term = searchTerm.toLowerCase();
-                filtered = filtered.filter(entry => 
-                    (entry.custName && entry.custName.toLowerCase().includes(term)) ||
-                    (entry.custNumber && entry.custNumber.includes(term)) ||
-                    (entry.location && entry.location.toLowerCase().includes(term))
-                );
-            }
-            
-            if (employeeFilter !== 'all') {
-                filtered = filtered.filter(entry => entry.empName === employeeFilter);
-            }
-            
-            return filtered;
-        }
-
-        // Display customer cards
-        function displayCustomerCards() {
-            const filtered = getFilteredEntries();
-            const customers = {};
-
-            filtered.forEach(entry => {
-                if (!customers[entry.custNumber]) {
-                    customers[entry.custNumber] = {
-                        name: entry.custName,
-                        number: entry.custNumber,
-                        total: 0,
-                        count: 0,
-                        lastDate: entry.date
-                    };
-                }
-                customers[entry.custNumber].total += Number(entry.amount);
-                customers[entry.custNumber].count++;
-                if (entry.date > customers[entry.custNumber].lastDate) {
-                    customers[entry.custNumber].lastDate = entry.date;
-                }
-            });
-
-            const cardsDiv = document.getElementById('customerCards');
-            
-            if (Object.keys(customers).length === 0) {
-                cardsDiv.innerHTML = '<div class="empty-message">No customers found</div>';
-                return;
-            }
-
-            cardsDiv.innerHTML = Object.values(customers).map(cust => `
-                <div class="customer-card" onclick="showCustomerDetails('${cust.number}')">
-                    <div class="customer-header">
-                        <span class="customer-name">${escapeHtml(cust.name)}</span>
-                        <span class="customer-total">${formatCurrency(cust.total)}</span>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        📞 ${escapeHtml(cust.number)}<br>
-                        📊 Visits: ${cust.count}<br>
-                        💰 Average: ${formatCurrency(cust.total/cust.count)}<br>
-                        📅 Last: ${cust.lastDate}
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
-                        <button class="whatsapp-btn" onclick="event.stopPropagation(); shareCustomerOnWhatsApp('${cust.number}')" 
-                                style="flex:1; min-width: 100px;">
-                            📱 Share
-                        </button>
-                        <button class="delete-btn" onclick="event.stopPropagation(); deleteCustomer('${cust.number}')" 
-                                style="flex:1; min-width: 100px;">
-                            🗑️ Delete All
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Display entries in table
-        function displayEntries() {
-            const filtered = getFilteredEntries();
-            const tbody = document.getElementById('tableBody');
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px;">No entries found</td></tr>';
-                return;
-            }
-
-            tbody.innerHTML = filtered.reverse().map(entry => {
-                // Escape the entry for safe JSON in onclick
-                const entryJson = JSON.stringify(entry).replace(/'/g, "\\'");
-                return `
-                <tr>
-                    <td>${entry.date}<br><small>${entry.time || ''}</small></td>
-                    <td>${escapeHtml(entry.empName)}</td>
-                    <td>${escapeHtml(entry.custName)}</td>
-                    <td>${escapeHtml(entry.custNumber)}</td>
-                    <td>${escapeHtml(entry.location)}</td>
-                    <td style="color: #27ae60; font-weight: bold;">${formatCurrency(entry.amount)}</td>
-                    <td>${entry.paymentMode || 'Cash'}</td>
-                    <td>
-                        <button class="delete-btn" onclick="deleteEntry(${entry.id})">Delete</button>
-                        <button class="whatsapp-btn" onclick='shareEntry(${entryJson})'>WhatsApp</button>
-                    </td>
-                </tr>
-            `}).join('');
-        }
-
-        // Delete single entry
-        function deleteEntry(id) {
-            if (confirm('Are you sure you want to delete this entry?')) {
-                collections = collections.filter(e => e.id !== id);
-                localStorage.setItem('collections', JSON.stringify(collections));
-                updateStats();
-                displayCustomerCards();
-                displayEntries();
-                updateEmployeeFilter();
+            // सब्जी
+            else if (msg.includes('सब्जी') || msg.includes('vegetable') || msg.includes('टमाटर') || msg.includes('आलू') || msg.includes('प्याज')) {
+                let items = [];
+                if (msg.includes('टमाटर')) items.push('टमाटर');
+                if (msg.includes('आलू')) items.push('आलू');
+                if (msg.includes('प्याज')) items.push('प्याज');
+                if (msg.includes('भिंडी')) items.push('भिंडी');
+                if (msg.includes('गोभी')) items.push('गोभी');
                 
-                // If modal is open, refresh it
-                if (document.getElementById('customerModal').style.display === 'flex') {
-                    const custNumber = document.getElementById('modalCustomerName').textContent.split(' - ')[1];
-                    if (custNumber) showCustomerDetails(custNumber);
+                if (items.length > 0) {
+                    return `<i class="fas fa-carrot"></i> <span class="shop-name">📍 ताजा मंडी (${currentCity})</span><br>
+                            🥕 आपकी मांगी हुई सब्जी:<br>
+                            ${items.map(item => `• ${item}: ₹${Math.floor(Math.random() * 30 + 20)}/kg`).join('<br>')}<br>
+                            🚚 फ्री होम डिलीवरी: <span class="delivery-time">20 मिनट</span><br>
+                            📞 ऑर्डर करें: 96855-11883`;
+                } else {
+                    return `<i class="fas fa-carrot"></i> <span class="shop-name">📍 ताजा मंडी (${currentCity})</span><br>
+                            🥕 आज का रेट:<br>
+                            • टमाटर: ₹30/kg<br>
+                            • आलू: ₹25/kg<br>
+                            • प्याज: ₹35/kg<br>
+                            • भिंडी: ₹40/kg<br>
+                            • गोभी: ₹30/pcs<br>
+                            🚚 होम डिलीवरी: 20 मिनट<br>
+                            📞 ऑर्डर करें: 96855-11883`;
                 }
             }
-        }
-
-        // Delete all entries of a customer
-        function deleteCustomer(custNumber) {
-            if (confirm('Are you sure you want to delete ALL entries of this customer?')) {
-                collections = collections.filter(e => e.custNumber !== custNumber);
-                localStorage.setItem('collections', JSON.stringify(collections));
-                updateStats();
-                displayCustomerCards();
-                displayEntries();
-                updateEmployeeFilter();
-                closeModal();
+            
+            // दूध
+            else if (msg.includes('दूध') || msg.includes('milk') || msg.includes('दुध')) {
+                return `<i class="fas fa-mug-hot"></i> <span class="shop-name">📍 गौरव डेयरी (${currentCity})</span><br>
+                        🥛 दूध उपलब्ध:<br>
+                        • गाय का दूध: ₹50/लीटर<br>
+                        • भैंस का दूध: ₹60/लीटर<br>
+                        • पैकेट वाला: ₹55/लीटर<br>
+                        ⏰ सुबह 6 बजे डिलीवरी<br>
+                        📞 सब्सक्राइब करें: 96855-11883`;
             }
-        }
-
-        // Share entry on WhatsApp
-        function shareEntry(entry) {
-            const message = `*Collection Receipt*\n\n` +
-                `👤 Customer: ${entry.custName}\n` +
-                `📞 Phone: ${entry.custNumber}\n` +
-                `📍 Location: ${entry.location}\n` +
-                `💰 Amount: ₹${entry.amount}\n` +
-                `📅 Date: ${entry.date} ${entry.time || ''}\n` +
-                `👨‍💼 Employee: ${entry.empName}`;
             
-            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        }
-
-        // Share customer summary on WhatsApp
-        function shareCustomerOnWhatsApp(custNumber) {
-            const customerEntries = collections.filter(e => e.custNumber === custNumber);
-            const customer = customerEntries[0];
-            const total = customerEntries.reduce((s, e) => s + Number(e.amount), 0);
-            
-            const message = `*Customer Summary*\n\n` +
-                `👤 Name: ${customer.custName}\n` +
-                `📞 Phone: ${custNumber}\n` +
-                `💰 Total Amount: ₹${total.toFixed(2)}\n` +
-                `📊 Total Visits: ${customerEntries.length}\n` +
-                `💵 Average: ₹${(total/customerEntries.length).toFixed(2)}\n\n` +
-                `*Recent Entries:*\n` +
-                customerEntries.slice(-3).map(e => 
-                    `📅 ${e.date}: ₹${e.amount} (${e.location})`
-                ).join('\n');
-            
-            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        }
-
-        // Show customer details in modal
-        function showCustomerDetails(custNumber) {
-            const entries = collections.filter(e => e.custNumber === custNumber);
-            const customer = entries[0];
-            
-            if (!customer) return;
-            
-            const total = entries.reduce((s, e) => s + Number(e.amount), 0);
-            
-            document.getElementById('modalCustomerName').textContent = customer.custName;
-            
-            let html = `
-                <div style="margin-bottom: 20px;">
-                    <p><strong>📞 Phone:</strong> ${custNumber}</p>
-                    <p><strong>💰 Total Amount:</strong> ₹${total.toFixed(2)}</p>
-                    <p><strong>📊 Total Visits:</strong> ${entries.length}</p>
-                    <p><strong>💵 Average:</strong> ₹${(total/entries.length).toFixed(2)}</p>
-                </div>
+            // दवाई
+            else if (msg.includes('दवाई') || msg.includes('दवा') || msg.includes('medicine') || msg.includes('tablet') || msg.includes('पेरासिटामोल')) {
+                let medicine = '';
+                if (msg.includes('पेरासिटामोल')) medicine = 'पेरासिटामोल';
+                else if (msg.includes('सिरप')) medicine = 'खांसी सिरप';
+                else if (msg.includes('इंसुलिन')) medicine = 'इंसुलिन';
+                else medicine = 'आपकी दवाई';
                 
-                <h3 style="margin-bottom: 15px;">Complete History</h3>
-            `;
-
-            entries.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(entry => {
-                html += `
-                    <div class="history-item">
-                        <div>
-                            <div class="history-date">${entry.date} ${entry.time || ''}</div>
-                            <div style="font-size: 12px; color: #666;">${escapeHtml(entry.location)} | ${escapeHtml(entry.empName)}</div>
-                        </div>
-                        <div>
-                            <span class="history-amount">₹${entry.amount}</span>
-                            <div class="history-actions">
-                                <button class="delete-btn" onclick="deleteEntry(${entry.id}); setTimeout(()=>showCustomerDetails('${custNumber}'), 100)" 
-                                        style="padding: 5px 10px;">Delete</button>
-                                <button class="whatsapp-btn" onclick='shareEntry(${JSON.stringify(entry).replace(/'/g, "\\'")})' 
-                                        style="padding: 5px 10px;">Share</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            document.getElementById('modalContent').innerHTML = html;
-            document.getElementById('customerModal').style.display = 'flex';
-        }
-
-        // Close modal
-        function closeModal() {
-            document.getElementById('customerModal').style.display = 'none';
-        }
-
-        // Search function
-        function searchEntries() {
-            searchTerm = document.getElementById('searchInput').value;
-            displayCustomerCards();
-            displayEntries();
-        }
-
-        function clearSearch() {
-            searchTerm = '';
-            document.getElementById('searchInput').value = '';
-            displayCustomerCards();
-            displayEntries();
-        }
-
-        // Filter functions
-        function filterByPeriod(period) {
-            currentPeriod = period;
-            document.querySelectorAll('.period-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            displayCustomerCards();
-            displayEntries();
-        }
-
-        function filterByEmployee() {
-            employeeFilter = document.getElementById('employeeFilter').value;
-            displayCustomerCards();
-            displayEntries();
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('customerModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
+                return `<i class="fas fa-pills"></i> <span class="shop-name">📍 मेडिकल स्टोर (${currentCity}) - 24/7</span><br>
+                        💊 ${medicine}: ₹${Math.floor(Math.random() * 100 + 20)}<br>
+                        🚚 फ्री डिलीवरी: <span class="delivery-time">15 मिनट</span><br>
+                        📞 ऑर्डर करें: 96855-11883<br>
+                        ⚕️ प्रिस्क्रिप्शन भी मान्य`;
+            }
+            
+            // किराना
+            else if (msg.includes('किराना') || msg.includes('groceries') || msg.includes('आटा') || msg.includes('चावल') || msg.includes('चीनी')) {
+                return `<i class="fas fa-shopping-basket"></i> <span class="shop-name">📍 श्री किराना स्टोर (${currentCity})</span><br>
+                        🛒 किराना सामान:<br>
+                        • आटा: ₹35/kg<br>
+                        • चावल: ₹50/kg<br>
+                        • चीनी: ₹45/kg<br>
+                        • दाल: ₹90/kg<br>
+                        • तेल: ₹120/लीटर<br>
+                        🚚 होम डिलीवरी: 1 घंटा<br>
+                        📞 ऑर्डर करें: 96855-11883`;
+            }
+            
+            // खाना / रेस्टोरेंट
+            else if (msg.includes('खाना') || msg.includes('भोजन') || msg.includes('रोटी') || msg.includes('सब्जी') || msg.includes('थाली') || msg.includes('restaurant')) {
+                return `<i class="fas fa-utensils"></i> <span class="shop-name">📍 होटल श्रीनाथ (${currentCity})</span><br>
+                        🍽️ मेनू:<br>
+                        • वेज थाली: ₹120<br>
+                        • नॉन-वेज थाली: ₹180<br>
+                        • रोटी सब्जी: ₹80<br>
+                        • बिरयानी: ₹150<br>
+                        • सूप: ₹50<br>
+                        🚚 डिलीवरी: <span class="delivery-time">30 मिनट</span><br>
+                        📞 ऑर्डर करें: 96855-11883`;
+            }
+            
+            // सफाई सामान
+            else if (msg.includes('सफाई') || msg.includes('झाड़ू') || msg.includes('पोंछा') || msg.includes('साबुन') || msg.includes('डिटर्जेंट')) {
+                return `<i class="fas fa-broom"></i> <span class="shop-name">📍 होम केयर स्टोर (${currentCity})</span><br>
+                        🧹 सफाई सामान:<br>
+                        • झाड़ू: ₹50<br>
+                        • पोंछा: ₹120<br>
+                        • साबुन: ₹30/pcs<br>
+                        • डिटर्जेंट पाउडर: ₹60/kg<br>
+                        • फिनाइल: ₹40/लीटर<br>
+                        📞 ऑर्डर करें: 96855-11883`;
+            }
+            
+            // पालतू जानवर
+            else if (msg.includes('कुत्ता') || msg.includes('बिल्ली') || msg.includes('पालतू') || msg.includes('pet') || msg.includes('डॉग')) {
+                return `<i class="fas fa-dog"></i> <span class="shop-name">📍 पेट शॉप (${currentCity})</span><br>
+                        🐕 पालतू सामान:<br>
+                        • डॉग फूड: ₹500/3kg<br>
+                        • कैट फूड: ₹450/2kg<br>
+                        • बिस्कुट: ₹100/pack<br>
+                        • खिलौने: ₹150<br>
+                        📞 ऑर्डर करें: 96855-11883`;
+            }
+            
+            // हेल्प / सपोर्ट
+            else if (msg.includes('help') || msg.includes('मदद') || msg.includes('कैसे') || msg.includes('guide')) {
+                return `🤝 <span class="shop-name">कैसे मदद कर सकते हैं?</span><br>
+                        📌 आप हमसे कुछ भी मांग सकते हैं:<br>
+                        • "गैस सिलेंडर चाहिए"<br>
+                        • "सब्जी लानी है 2 किलो टमाटर"<br>
+                        • "दूध चाहिए रोज सुबह"<br>
+                        • "पेरासिटामोल दवाई चाहिए"<br>
+                        • "खाना मंगवाना है"<br>
+                        • "किराने का सामान चाहिए"<br><br>
+                        📞 24/7 हेल्पलाइन: 96855-11883`;
+            }
+            
+            // डिफ़ॉल्ट - अगर कुछ समझ न आए
+            else {
+                return `🤔 <span class="shop-name">मैं समझ गया! आपको "${message}" चाहिए?</span><br><br>
+                        📦 ${currentCity} में यह सर्विस उपलब्ध है।<br>
+                        📞 तुरंत ऑर्डर के लिए कॉल करें: <span class="price">96855-11883</span><br>
+                        🚚 डिलीवरी: 20-30 मिनट<br><br>
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i> कृपया ऊपर दिए नंबर पर कॉल करें या व्हाट्सएप करें।`;
             }
         }
-
-        // Pull to refresh (simulated)
-        let touchStart = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStart = e.touches[0].clientY;
-        }, false);
-
-        document.addEventListener('touchmove', (e) => {
-            if (window.scrollY === 0 && e.touches[0].clientY - touchStart > 100) {
-                // Refresh data
-                collections = JSON.parse(localStorage.getItem('collections')) || [];
-                if (document.getElementById('adminPanel').style.display === 'block') {
-                    updateStats();
-                    displayCustomerCards();
-                    displayEntries();
-                    updateEmployeeFilter();
-                }
-                
-                // Show feedback
-                const hint = document.querySelector('.refresh-hint');
-                hint.innerHTML = '✅ Refreshed!';
-                setTimeout(() => {
-                    hint.innerHTML = '⬇️ Pull down to refresh ⬇️';
-                }, 1000);
-            }
-        }, false);
-
-        // Auto-refresh
-        setInterval(() => {
-            collections = JSON.parse(localStorage.getItem('collections')) || [];
-            if (document.getElementById('adminPanel').style.display === 'block') {
-                updateStats();
-                displayCustomerCards();
-                displayEntries();
-                updateEmployeeFilter();
-            }
-        }, 5000);
-
-        // Make functions globally available
-        window.checkPassword = checkPassword;
-        window.logout = logout;
-        window.searchEntries = searchEntries;
-        window.clearSearch = clearSearch;
-        window.filterByPeriod = filterByPeriod;
-        window.filterByEmployee = filterByEmployee;
-        window.showCustomerDetails = showCustomerDetails;
-        window.closeModal = closeModal;
-        window.deleteEntry = deleteEntry;
-        window.deleteCustomer = deleteCustomer;
-        window.shareEntry = shareEntry;
-        window.shareCustomerOnWhatsApp = shareCustomerOnWhatsApp;
     </script>
 </body>
 </html>
