@@ -1,282 +1,94 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>डिजिटल स्कूल | होमपेज और डैशबोर्ड</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<title>Rajasthani Products</title>
 
-        body {
-            background: #f0f4f8;
-            color: #333;
-            line-height: 1.6;
-        }
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #f5f5f5;
+}
 
-        /* नेविगेशन बार */
-        .navbar {
-            background: #2c3e50;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+h1 {
+  background: orange;
+  color: white;
+  padding: 10px;
+}
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-        .nav-links {
-            list-style: none;
-            display: flex;
-        }
+.card {
+  background: white;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
-        .nav-links li {
-            margin-left: 1.5rem;
-        }
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: 0.3s;
-        }
+button {
+  background: orange;
+  color: white;
+  border: none;
+  padding: 8px;
+  margin-top: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
 
-        .nav-links a:hover {
-            color: #3498db;
-        }
+button:hover {
+  background: darkorange;
+}
+</style>
 
-        /* हीरो सेक्शन */
-        .hero {
-            background: linear-gradient(135deg, #3498db, #8e44ad);
-            color: white;
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* कंटेनर */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        /* फॉर्म सेक्शन */
-        .form-section {
-            background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .form-section h2 {
-            margin-bottom: 1.5rem;
-            color: #2c3e50;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .btn {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
-        }
-
-        .btn:hover {
-            background: #2980b9;
-        }
-
-        /* डैशबोर्ड पैनल */
-        .dashboard {
-            background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .dashboard h2 {
-            margin-bottom: 1.5rem;
-            color: #2c3e50;
-        }
-
-        .dashboard-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-
-        .card {
-            background: #f9f9f9;
-            border-left: 4px solid #3498db;
-            padding: 1rem;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .card h3 {
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-        }
-
-        .card p {
-            color: #666;
-            margin-bottom: 0.25rem;
-        }
-
-        .empty-dashboard {
-            text-align: center;
-            color: #999;
-            padding: 2rem;
-            grid-column: 1 / -1;
-        }
-
-        /* फुटर */
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-    </style>
 </head>
 <body>
-    <!-- नेविगेशन बार -->
-    <nav class="navbar">
-        <div class="logo">डिजिटल स्कूल</div>
-        <ul class="nav-links">
-            <li><a href="#">होम</a></li>
-            <li><a href="#">कोर्स</a></li>
-            <li><a href="#">डैशबोर्ड</a></li>
-            <li><a href="#">संपर्क</a></li>
-        </ul>
-    </nav>
 
-    <!-- हीरो सेक्शन -->
-    <section class="hero">
-        <h1>डिजिटल स्कूल में आपका स्वागत है</h1>
-        <p>आज ही अपना प्रोजेक्ट सबमिट करें और डैशबोर्ड पर देखें।</p>
-    </section>
+<h1>Rajasthani Product Gallery</h1>
 
-    <!-- मुख्य कंटेनर -->
-    <div class="container">
-        <!-- फॉर्म सेक्शन (होमपेज का हिस्सा) -->
-        <section class="form-section">
-            <h2>अपना प्रोजेक्ट सबमिट करें</h2>
-            <form id="projectForm">
-                <div class="form-group">
-                    <label for="studentName">छात्र का नाम</label>
-                    <input type="text" id="studentName" placeholder="जैसे: राहुल कुमार" required>
-                </div>
-                <div class="form-group">
-                    <label for="className">कक्षा</label>
-                    <input type="text" id="className" placeholder="जैसे: 10वीं" required>
-                </div>
-                <div class="form-group">
-                    <label for="projectTitle">प्रोजेक्ट का शीर्षक</label>
-                    <input type="text" id="projectTitle" placeholder="जैसे: डिजिटल इंडिया" required>
-                </div>
-                <button type="submit" class="btn">डैशबोर्ड में जमा करें</button>
-            </form>
-        </section>
+<!-- Download All -->
+<a href="products.zip" download>
+  <button>Download All Products</button>
+</a>
 
-        <!-- डैशबोर्ड पैनल -->
-        <section class="dashboard">
-            <h2>📊 डैशबोर्ड पैनल</h2>
-            <div class="dashboard-items" id="dashboardItems">
-                <div class="empty-dashboard">
-                    अभी तक कोई प्रोजेक्ट सबमिट नहीं हुआ है। ऊपर फॉर्म भरें।
-                </div>
-            </div>
-        </section>
-    </div>
+<div class="container">
 
-    <!-- फुटर -->
-    <footer>
-        <p>&copy; 2025 डिजिटल स्कूल प्रोजेक्ट। सभी अधिकार सुरक्षित।</p>
-    </footer>
+  <div class="card">
+    <img src="https://via.placeholder.com/200" alt="Product">
+    <h3>Rajasthani Jutti</h3>
+    <a href="https://via.placeholder.com/200" download>
+      <button>Download</button>
+    </a>
+  </div>
 
-    <script>
-        // फॉर्म सबमिट होने पर डैशबोर्ड अपडेट करें
-        document.getElementById('projectForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // पेज रीलोड न हो
+  <div class="card">
+    <img src="https://via.placeholder.com/200" alt="Product">
+    <h3>Bandhani Saree</h3>
+    <a href="https://via.placeholder.com/200" download>
+      <button>Download</button>
+    </a>
+  </div>
 
-            // इनपुट फील्ड से वैल्यू लें
-            const studentName = document.getElementById('studentName').value.trim();
-            const className = document.getElementById('className').value.trim();
-            const projectTitle = document.getElementById('projectTitle').value.trim();
+  <div class="card">
+    <img src="https://via.placeholder.com/200" alt="Product">
+    <h3>Handmade Pottery</h3>
+    <a href="https://via.placeholder.com/200" download>
+      <button>Download</button>
+    </a>
+  </div>
 
-            // अगर कोई फील्ड खाली है तो अलर्ट दिखाएँ
-            if (!studentName || !className || !projectTitle) {
-                alert('कृपया सभी फील्ड भरें!');
-                return;
-            }
+</div>
 
-            // डैशबोर्ड कंटेनर को पकड़ें
-            const dashboardItems = document.getElementById('dashboardItems');
-
-            // अगर 'खाली डैशबोर्ड' का संदेश है तो उसे हटा दें
-            const emptyMsg = dashboardItems.querySelector('.empty-dashboard');
-            if (emptyMsg) {
-                emptyMsg.remove();
-            }
-
-            // नया कार्ड बनाएँ
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <h3>${projectTitle}</h3>
-                <p><strong>छात्र:</strong> ${studentName}</p>
-                <p><strong>कक्षा:</strong> ${className}</p>
-                <p><small>सबमिट दिनांक: ${new Date().toLocaleDateString('hi-IN')}</small></p>
-            `;
-
-            // कार्ड को डैशबोर्ड में जोड़ें
-            dashboardItems.appendChild(card);
-
-            // फॉर्म को रीसेट करें (वैकल्पिक)
-            document.getElementById('projectForm').reset();
-        });
-    </script>
 </body>
 </html>
-
